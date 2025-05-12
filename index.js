@@ -16,7 +16,6 @@ mongoose.connect(uri)
 
 app.use('/api/v1', router)
 
-
 app.listen(PORT, () => {
     console.log(`App Listens at port ${PORT}`);
 })

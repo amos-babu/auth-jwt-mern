@@ -51,8 +51,13 @@ const homeRoute = (req, res) => {
     res.status(200).json({ message: "Welcome, Home"});
 }
 
+const logout = (req, res) => {
+    res.status(200).json({ message: "Welcome, Home"});
+}
+
 module.exports = {
     register,
     login,
-    homeRoute
+    homeRoute,
+    logout
 }
