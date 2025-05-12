@@ -40,18 +40,31 @@ const login = async (req, res) => {
             expiresIn: '1h',
         });
 
-        res.status(200).json({accessToken: token, message: "Login Successfull!"})
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: false, // process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 60 * 60 * 1000
+        })
+        .status(200)
+        .json({ accessToken: token, message: "Login Successfull!"})
         
     } catch (error) {
         res.status(500).json({ message: 'Login Failed!'})
     }
 }
 
-const homeRoute = (req, res) => {
-    res.status(200).json({ message: "Welcome, Home"});
+const logout = (req, res) => {
+   res.clearCookie('token', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict',
+   });
+   
+   res.status(200).json({ message: 'Logged Out!'})
 }
 
-const logout = (req, res) => {
+const homeRoute = (req, res) => {
     res.status(200).json({ message: "Welcome, Home"});
 }
 
