@@ -42,12 +42,12 @@ const login = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: false, // process.env.NODE_ENV === 'production',
+            secure:  process.env.NODE_ENV === 'development',
             sameSite: 'Strict',
             maxAge: 60 * 60 * 1000
         })
         .status(200)
-        .json({ accessToken: token, message: "Login Successfull!"})
+        .json({ accessToken: token, message: "Login Successfull!" })
         
     } catch (error) {
         res.status(500).json({ message: 'Login Failed!'})
@@ -57,7 +57,7 @@ const login = async (req, res) => {
 const logout = (req, res) => {
    res.clearCookie('token', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'development',
     sameSite: 'Strict',
    });
    
