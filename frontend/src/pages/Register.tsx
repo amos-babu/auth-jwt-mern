@@ -1,4 +1,37 @@
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router";
+
+interface FormDataProps {
+  name: string;
+  email: string;
+  password: string;
+}
+
 function Register() {
+  const [formData, setFormData] = useState<FormDataProps>({
+    name: "",
+    email: "",
+    password: "",
+  });
+
+  const navigate = useNavigate();
+
+  const registerUser = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/register",
+        formData
+      );
+      setFormData({ name: "", email: "", password: "" });
+      navigate("/login");
+      console.log(response.data);
+    } catch (error) {
+      console.error("Error registering user:", error);
+    }
+  };
+
   return (
     <div className="h-screen flex flex-col justify-center items-center">
       <h2 className="text-2xl font-semibold mb-2.5">Register</h2>
@@ -7,7 +40,7 @@ function Register() {
        border-gray-200 rounded-lg shadow-sm hover:bg-gray-100
         dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
       >
-        <form>
+        <form onSubmit={registerUser}>
           <div className=" mb-6">
             <div>
               <label
@@ -19,13 +52,16 @@ function Register() {
               <input
                 type="text"
                 id="first_name"
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                value={formData.name}
                 className="bg-gray-50 border border-gray-300
                  text-gray-900 text-sm rounded-lg focus:ring-blue-500
                   focus:border-blue-500 block w-96 p-2.5 dark:bg-gray-700
                    dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
                     dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="John"
-                required
               />
             </div>
             <div>
@@ -38,12 +74,15 @@ function Register() {
               <input
                 type="email"
                 id="website"
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
+                value={formData.email}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm 
                 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-96 
                 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
                  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="amosbabu@flowbite.com"
-                required
               />
             </div>
             <div>
@@ -56,6 +95,10 @@ function Register() {
               <input
                 type="password"
                 id="password"
+                onChange={(e) =>
+                  setFormData({ ...formData, password: e.target.value })
+                }
+                value={formData.password}
                 className="bg-gray-50 border border-gray-300 text-gray-900 
                 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 
                 block w-96 p-2.5 dark:bg-gray-700 dark:border-gray-600
