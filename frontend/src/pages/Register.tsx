@@ -27,13 +27,13 @@ function Register() {
   const registerUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/register",
-        formData
-      );
+      // Authorization: `Bearer ${token}`,
+      await axios.post("http://localhost:3000/api/v1/register", formData, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      });
       setFormData({ name: "", email: "", password: "" });
       navigate("/");
-      sessionStorage.setItem("token", response.data.accessToken);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 422) {

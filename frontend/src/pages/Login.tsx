@@ -25,13 +25,12 @@ function Login() {
   const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/v1/login",
-        formData
-      );
+      await axios.post("http://localhost:3000/api/v1/login", formData, {
+        withCredentials: true,
+        headers: { "Content-Type": "application/json" },
+      });
       setFormData({ email: "", password: "" });
       navigate("/");
-      sessionStorage.setItem("token", response.data.accessToken);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.response?.status === 422) {

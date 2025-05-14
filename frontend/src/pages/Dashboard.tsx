@@ -1,13 +1,19 @@
 import axios from "axios";
 import { useNavigate } from "react-router";
 
-const Dashboard = (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+const Dashboard = () => {
   const navigate = useNavigate();
-  const logout = () => {
-    axios.post("http://localhost:3000/api/v1/logout");
-    sessionStorage.removeItem("token");
-    navigate("/login");
+  const logout = async () => {
+    try {
+      await axios.post(
+        "http://localhost:3000/api/v1/logout",
+        {},
+        { withCredentials: true }
+      );
+      navigate("/login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
   };
   return (
     <>

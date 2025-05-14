@@ -1,3 +1,5 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router";
 
 interface ProtectedRouteProps {
@@ -5,11 +7,30 @@ interface ProtectedRouteProps {
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-  const isAuthenticated = sessionStorage.getItem("token") !== null;
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  if (!isAuthenticated) {
-    return <Navigate to={"/login"} replace />;
-  }
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        await axios.get("http://localhost:3000/api/v1/protected", {
+          withCredentials: true,
+        });
+        setIsAuthenticated(true);
+      } catch (error) {
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  if (loading)
+    return <div className="text-xl font-bold text-center p-6">Loading...</div>;
+
+  if (!isAuthenticated) return <Navigate to={"/login"} replace />;
 
   return <>{children}</>;
 };

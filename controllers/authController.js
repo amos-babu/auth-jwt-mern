@@ -19,8 +19,14 @@ const register = async (req, res) => {
         const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, {
             expiresIn: '1h',
         });
-    
-        res.status(201).json({ accessToken: token, message: "User Created Successfully" });
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure:  false, // process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 60 * 60 * 1000
+        })
+        .status(201).json({ accessToken: token, message: "User Created Successfully" });
     } catch (error) {
         res.status(500).json({ message: "An Error Occurred! ", error})
     }
@@ -46,7 +52,7 @@ const login = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure:  process.env.NODE_ENV === 'development',
+            secure:  false, // process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
             maxAge: 60 * 60 * 1000
         })
@@ -61,7 +67,7 @@ const login = async (req, res) => {
 const logout = (req, res) => {
    res.clearCookie('token', {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'development',
+    secure: false, //process.env.NODE_ENV === 'production',
     sameSite: 'Strict',
    });
    
@@ -72,9 +78,14 @@ const homeRoute = (req, res) => {
     res.status(200).json({ message: "Welcome, Home"});
 }
 
+const protectedRoute = (req, res) => {
+    res.status(200).json({ user: req.user })
+}
+
 module.exports = {
     register,
     login,
     homeRoute,
-    logout
+    logout,
+    protectedRoute
 }
