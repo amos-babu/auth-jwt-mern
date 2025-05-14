@@ -18,6 +18,7 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
         });
         setIsAuthenticated(true);
       } catch (error) {
+        console.error("Error checking authentication:", error);
         setIsAuthenticated(false);
       } finally {
         setLoading(false);
