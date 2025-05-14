@@ -1,14 +1,13 @@
 require('dotenv').config()
 const express = require('express');
 const router = require('./routes/authRoutes')
-const mongoose = require('mongoose')
 const app = express()
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const connectDB = require('./config/db')
 
 const PORT = process.env.PORT || 3000
-const uri = process.env.MONGO_URI
 
 app.use(bodyParser.json())
 app.use(cookieParser())
@@ -20,9 +19,7 @@ app.use(cors({
 
 app.use('/api/v1', router)
 
-mongoose.connect(uri)
-    .then(() => console.log("MongoDB Connected!"))
-    .catch((err) => console.log("MongoDB Connection Error", err))
+connectDB();
 
 app.listen(PORT, () => {
     console.log(`App Listens at port ${PORT}`);

@@ -22,7 +22,7 @@ const register = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure:  false, // process.env.NODE_ENV === 'production',
+            secure:  true, // process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
             maxAge: 60 * 60 * 1000
         })
@@ -52,7 +52,7 @@ const login = async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure:  false, // process.env.NODE_ENV === 'production',
+            secure:  true, // process.env.NODE_ENV === 'production',
             sameSite: 'Strict',
             maxAge: 60 * 60 * 1000
         })
@@ -67,7 +67,7 @@ const login = async (req, res) => {
 const logout = (req, res) => {
    res.clearCookie('token', {
     httpOnly: true,
-    secure: false, //process.env.NODE_ENV === 'production',
+    secure: true, //process.env.NODE_ENV === 'production',
     sameSite: 'Strict',
    });
    
@@ -79,7 +79,7 @@ const homeRoute = (req, res) => {
 }
 
 const protectedRoute = (req, res) => {
-    res.status(200).json({ user: req.user })
+    res.status(200).json({ message: "Protected Route!"});
 }
 
 module.exports = {
