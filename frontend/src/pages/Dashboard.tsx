@@ -1,15 +1,11 @@
-import axios from "axios";
+import axios from "../axiosConfig";
 import { useNavigate } from "react-router";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const logout = async () => {
     try {
-      await axios.post(
-        "http://localhost:3000/api/v1/logout",
-        {},
-        { withCredentials: true }
-      );
+      await axios.post("/logout", {});
       navigate("/login");
     } catch (error) {
       console.error("Error logging out:", error);

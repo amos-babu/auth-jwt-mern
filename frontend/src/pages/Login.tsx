@@ -1,5 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
+import axios from "../axiosConfig";
+import axiosMain from "axios";
 import { Link, useNavigate } from "react-router";
 
 interface FormDataProps {
@@ -25,14 +26,11 @@ function Login() {
   const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:3000/api/v1/login", formData, {
-        withCredentials: true,
-        headers: { "Content-Type": "application/json" },
-      });
+      await axios.post("/login", formData);
       setFormData({ email: "", password: "" });
       navigate("/");
     } catch (error) {
-      if (axios.isAxiosError(error)) {
+      if (axiosMain.isAxiosError(error)) {
         if (error.response?.status === 422) {
           setValidationError(error.response.data.errors);
         } else {
