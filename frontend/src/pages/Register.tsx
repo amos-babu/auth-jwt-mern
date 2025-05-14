@@ -8,12 +8,18 @@ interface FormDataProps {
   password: string;
 }
 
+interface ErrorProps {
+  msg: string;
+  type: string;
+}
+
 function Register() {
   const [formData, setFormData] = useState<FormDataProps>({
     name: "",
     email: "",
     password: "",
   });
+  const [error, setError] = useState<ErrorProps[]>([]);
 
   const navigate = useNavigate();
 
@@ -28,7 +34,13 @@ function Register() {
       navigate("/login");
       console.log(response.data);
     } catch (error) {
-      console.error("Error registering user:", error);
+      if (axios.isAxiosError(error)) {
+        if (error.response?.status === 422) {
+          setError(error.response.data.errors);
+        }
+      } else {
+        console.error("Unexpected error", error);
+      }
     }
   };
 
@@ -63,6 +75,9 @@ function Register() {
                     dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="John"
               />
+              {error.length > 0 && (
+                <p className="text-sm text-red-600">{error[0].msg}</p>
+              )}
             </div>
             <div>
               <label
@@ -84,6 +99,9 @@ function Register() {
                  dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="amosbabu@flowbite.com"
               />
+              {error.length > 0 && (
+                <p className="text-sm text-red-600">{error[1].msg}</p>
+              )}
             </div>
             <div>
               <label
@@ -105,6 +123,9 @@ function Register() {
                  dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500
                   dark:focus:border-blue-500"
               />
+              {error.length > 0 && (
+                <p className="text-sm text-red-600">{error[2].msg}</p>
+              )}
             </div>
           </div>
           <button
@@ -114,7 +135,7 @@ function Register() {
              rounded-lg text-sm w-96 sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600
               dark:hover:bg-blue-700 dark:focus:ring-blue-800"
           >
-            Submit
+            Register
           </button>
         </form>
       </div>
