@@ -1,0 +1,3 @@
+Check for duplicate email addresses before creating the user.
+Implement JWT tokens for login.
+Validate input (e.g., using express-validator).
