@@ -1,8 +1,6 @@
 backend/node_modules
 backend/.env
 
-read.txt
-
 #frontend
 # Logs
 frontend/logs
@@ -30,4 +28,8 @@ frontend/*.ntvs*
 frontend/*.njsproj
 frontend/*.sln
 frontend/*.sw?
+
+read.txt
+
+
 
